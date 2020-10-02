@@ -14,6 +14,9 @@ using namespace std;
 const int dr[] = {-1, 1, 0, 0}, dc[] = {0, 0, -1, 1};
 int visited[200][200];
 
+// 3ᵏ
+// we could have at most 4 directions to explore, but further the choices are
+// reduced into 3 (since we won't go back to where we come from)
 bool dfs(int i, int j, const vector<vector<char>> &b, const string &k, int ki) {
   int n = b.size(), m = b[0].size(), ans = 0;
 
@@ -32,6 +35,7 @@ bool dfs(int i, int j, const vector<vector<char>> &b, const string &k, int ki) {
   return 0;
 }
 
+// Nx3ᵏ
 class Solution {
  public:
   bool exist(vector<vector<char>> &b, string k) {
@@ -40,7 +44,8 @@ class Solution {
 
     for (int i = 0; i < n; ++i) {
       for (int j = 0; j < m; ++j) {
-        if (k[0] == b[i][j]) if(dfs(i, j, b, k, 1)) return 1;
+        if (k[0] == b[i][j])
+          if (dfs(i, j, b, k, 1)) return 1;
       }
     }
     return 0;

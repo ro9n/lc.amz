@@ -59,6 +59,7 @@ class Solution {
     vis[i][j] = 0;
   }
 
+  // Mx4x3ᴸ⁻¹ → O(Mx3ᴸ)
  public:
   vector<string> findWords(vector<vector<char>> &board, vector<string> &words) {
     trie *r = new trie();
