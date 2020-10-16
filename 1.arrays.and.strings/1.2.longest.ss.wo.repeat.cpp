@@ -19,12 +19,9 @@ class Solution {
     int n = s.size(), best = 1, last = -1;
 
     for (int i = 0; i < n; ++i) {
-      if (m.count(s[i]))
-        best = max(best, i - max(last, m[s[i]])), last = max(last, m[s[i]]);
-      else
-        best = max(best, i - last);
-      
+      if (m.count(s[i])) last = max(last, m[s[i]]);
       m[s[i]] = i;
+      best = max(best, i - last);
     }
 
     return best;
