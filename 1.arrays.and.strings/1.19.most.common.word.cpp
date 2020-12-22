@@ -28,7 +28,7 @@ class Solution {
       if (!s.count(ss)) ++f[ss];
       while (r < n && !isalpha(p[r])) ++r;
     }
-
+    
     for (auto it = f.begin(); it != f.end(); ++it) {
       if (it->second > ff) ff = it->second, best = it->first;
     }
