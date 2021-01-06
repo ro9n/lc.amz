@@ -34,6 +34,29 @@ class Solution {
     }
 
     if (best.ss - best.ff + 1 > n) return "";
-    else return t.substr(best.ff, best.ss - best.ff + 1);
+    else
+      return t.substr(best.ff, best.ss - best.ff + 1);
+  }
+};
+
+class Solution {
+ public:
+  string minWindow(string s, string t) {
+    int n = t.size(), m = s.size(), occ[60],
+        L = -1, R = m;  // best window
+    memset(occ, 0, sizeof occ);
+
+    for (int i = 0; i < n; ++i) ++occ[t[i] - 'A'];
+
+    for (int l = 0, r = 0, running = 0; r < m; ++r) {
+      if (--occ[s[r] - 'A'] >= 0) ++running;
+      while (running == n) {
+        if (r - l < R - L) L = l, R = r;         // consider current window
+        if (++occ[s[l++] - 'A'] > 0) --running;  // shrink
+      }
+    }
+
+    cout << L << R;
+    return ~L ? s.substr(L, R - L + 1) : "";
   }
 };

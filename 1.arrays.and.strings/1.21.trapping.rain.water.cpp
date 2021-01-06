@@ -26,3 +26,26 @@ class Solution {
     return w;
   }
 };
+
+//ro9n
+class Solution {
+ public:
+  int trap(vector<int>& h) {
+    int n = h.size(), ans = 0;
+
+    for (int l = 0, r = n - 1, L = 0, R = n - 1; l < r;) {
+      if (h[l] < h[r]) {
+        ans += h[L] - h[l++];
+        if (h[l] >= h[L]) L = l;
+      } else if (h[l] > h[r]) {
+        ans += h[R] - h[r--];
+        if (h[r] >= h[R]) R = r;
+      } else {
+        ++l;
+        if (h[l] >= h[L]) L = l;
+      }
+    }
+
+    return ans;
+  }
+};
