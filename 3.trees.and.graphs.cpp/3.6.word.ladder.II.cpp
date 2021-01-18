@@ -2,63 +2,67 @@
  * @file 3.6.word.ladder.II
  * @author Touhid Alam <taz.touhid@gmail.com>
  *
- * @date Monday September 21 2020
+ * @date Saturday January 16 2021
  *
- * @brief
+ * @brief 
  */
 
 #include <bits/stdc++.h>
 
 using namespace std;
 
-#define eb emplace_back
-#define all(k) k.begin(), k.end()
-
-int p = 0;
-vector<vector<string>> ans(100, vector<string>());
-unordered_map<string, unordered_set<string>> g;
-
-bool dfs(const string& u, const string& parent, const string& k) {
-  if (u == k) {
-    ans[p++].eb(u); return 1;
-  }
-
-  for(auto v: g[u]) {
-    if (v == parent) continue;
-    if (dfs(v, u, k)) ans[p].eb(v);
-  }
-}
-
 class Solution {
-public:
-    vector<vector<string>> findLadders(string b, string e, vector<string>& d) {
-        d.eb(b), d.eb(e);
-        unordered_set<string> s(all(d));
-        ans.clear();
-        p = 0;
-        g.clear();
+ public:
+  vector<vector<string>> findLadders(string b, string e, vector<string>& d) {
+    unordered_set<string> s(d.begin(), d.end());
+    s.insert(b);
+    if (!s.count(e)) return {};
 
-        for(auto w: d) {
-          string w1 = w;
-          for(auto i = 0; i < w.size(); ++i) {
-            auto c = w[i];
-            for(auto j = 'a'; j <= 'z'; ++j) {
-              if (j == c) continue;
-              w[i] = j;
-              if(s.count(w)) g[w].insert(w1), g[w1].insert(w);
-            }
-          }
+    unordered_map<string, vector<string>> adj;
+
+    for (auto u : s) {
+      for (int j = 0, m = u.size(); j < m; ++j) {
+        string v = u;
+        int c = u[j];
+        for (int k = 0; k < 26; ++k) {
+          if (k + 97 == c) continue;
+          v[j] = k + 97;
+          if (s.count(v)) adj[u].push_back(v);
         }
-
-        dfs(b, 0, e);
-
-        ans.resize(p);
-        int mn = INT_MAX;
-        for(int i = 0; i < ans.size(); ++i) {
-          reverse(all(ans[i]));
-          mn = min(mn, (int) ans[i].size());
-        }
-
-        return ans;
+        v[j] = c;
+      }
     }
+
+    unordered_set<string> visited;
+    queue<vector<string>> q;
+    q.push({b});
+    visited.insert(b);
+    vector<vector<string>> ans;
+    int best = 1e9 + 7;
+
+    while (!q.empty()) {
+      auto f = q.front();
+      q.pop();
+
+      if (f.size() > best) continue;
+
+      if (f.back() == e) {
+        best = (int)f.size();
+
+        ans.push_back(f);
+      }
+
+      visited.insert(f.back());
+
+      for (auto v : adj[f.back()]) {
+        if (!visited.count(v) || v == e) {
+          auto tmp = f;
+          tmp.push_back(v);
+          q.push(tmp);
+        }
+      }
+    }
+
+    return ans;
+  }
 };
