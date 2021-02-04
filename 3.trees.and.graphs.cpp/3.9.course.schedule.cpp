@@ -48,3 +48,33 @@ class Solution {
     return 1;
   }
 };
+
+class Solution {
+public:
+    bool canFinish(int courses, vector<vector<int>>& prerequisites) {
+      vector<int> adj[courses]; int ind[courses], done = 0;
+      queue<int> q;
+      
+      memset(ind, 0x0, sizeof(int)*courses);
+      
+      for(auto it: prerequisites) {
+        adj[it[1]].push_back(it[0]), ++ind[it[0]];
+      }
+      
+      for(int i = 0; i < courses; ++i) {
+        if (!ind[i]) ++done, q.push(i);
+      }
+      
+      while(!q.empty()) {
+        auto u = q.front(); q.pop();
+        
+        for(auto v: adj[u]) {
+          --ind[v];
+          if (ind[v] < 0) return 0;
+          else if (!ind[v]) ++done, q.push(v);
+        } 
+      }
+      
+      return done == courses;
+    }
+};
